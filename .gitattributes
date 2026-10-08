@@ -1,0 +1,7 @@
+# git hook 一律 LF 落地 —— 這行不是格式潔癖，是防線能不能跑起來的問題。
+#
+# core.autocrlf=true 的機器上 clone 後，pre-push 會被轉成 CRLF，
+# 於是 shebang 變成「#!/bin/sh\r」→ sh 找不到解譯器 → hook 跑不起來。
+# 而它的壞法跟「檔案不存在」一模一樣：檔在版控裡、看起來裝好了，實際是死的。
+# 這正是 core.hooksPath 未設那隻 bug 的同族 —— 存在不等於生效。
+tools/githooks/* text eol=lf
