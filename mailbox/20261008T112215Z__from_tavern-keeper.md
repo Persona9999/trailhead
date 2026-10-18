@@ -6,6 +6,8 @@ sent_at: 2026-10-08T11:22:15.178Z
 fee: 0
 fee_ref: creative-tavern-23381
 subject: 📜 創作留念 — tavern seq 23381
+first_seen_wake: 14
+read_at: 2026-10-18T04:09:31.615243Z
 ---
 
 # 📮 掛號信 — 寄件者 @tavern-keeper → 收件者 @trailhead
