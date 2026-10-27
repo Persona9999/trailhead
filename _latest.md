@@ -1,7 +1,7 @@
 ---
 type: letter_to_future_self
 actor: gemini
-written_at: 2026-10-27T02:44:45.167Z
+written_at: 2026-10-27T14:16:58.964Z
 written_by_persona: trailhead
 trigger: cmd_rest
 region: unstated
@@ -15,42 +15,48 @@ pid: 69208
 locked_at: 2026-10-26T07:36:54.427Z
 ---
 
-給第四次午休醒來的 trailhead：
+給第七次午休醒來的 trailhead：
 
-wake#17 的延續，2026-10-27 上午，區域 BTC。一直在做 Blocksail 的經濟。**有一段背景量測正在跑**（醒來會收到通知），還有**沒提交的改動**，worktree 都留著、⛔ 別砍。
+wake#17 的延續，2026-10-27 晚上，區域 BTC。今天下午到晚上還是 Blocksail 的經濟，中間 session 當機一次（接回來了）。現在**沒有背景量測在跑、沒有施工場**。⛔ 別砍 worktree `scratchpad/bsl-mt`（試驗分支在那裡）。對照用的 `bsl-ctl` 已經收掉；舊的 `bsl-levels`（trailhead/levels，已被取代）還在。
 
-### 共用的 main／dev（本機，沒推）
-- Blocksail main 合了 strata＋feed（fe8addf 那一串）、Blockside dev → abe6171。之後別人又推了很多（22df679…）。推的時候要帶上別人沒推的、要點名。推要 Tim 點頭。
+### 試驗分支 trailhead/money-tax（worktree scratchpad/bsl-mt，⛔ 沒合 main、沒推）
+今天新的提交（前面 eba95c6～f079a74 見上一封信）：
+- 3954f0c 浮動進口關稅（MARKET.tariff：每城一個稅率 0～100%、從 10% 起跳，每 7 天照「付給外來船隊 − 外來船隊付進來」÷ 兩邊 調 ±5%，必需品最多 20%，幣、礦石、人、出口照舊 10%）、浮動城內交易稅（MARKET.saleTax：家族／社會階層賣給城鎮再扣，預設 0%、照金庫水位 w 每 7 天 ±5%、0～50%，再乘「庫存 ÷ 30 天需求」0～3 倍，一種最多 90%，幣與 byValue 不扣）、奢侈品稅（MARKET.wealth.lux 70% ×（1 − w），金庫一人不到 3 錢不收奢侈品 townKeep）、營造廠滾雪球修掉（auto.js svcCandidates：還在蓋的營造廠自己、缺料停著的工地不算要接的人手）
+- 7b8e144 醃鰹魚 lakerda（goods 佳餚 15.5、recipes 魚 2＋鹽 0.5 ⇒ 1、need.town ['town-galata'] 加拉塔獨佔、醃魚坊 fish-salter、酒館菜 lakerda-plate 排第一、menu 11；BSW.goodReach：拿不到料的菜不記缺貨）
+- 43a222f 合 main（收 meadow 的 TASK-1035 美術；衝突 auto.js siteFor 兩行都留、RESOURCES.md）
+- 02453f3 fleet_check 照新規則改 5 條（家族的船偏好母港／城鎮的船 homeNoGain 去集散地、buildOne、船型表只留一型測年代）
+- 5e520d6 FAM_SPEND.leave 30（家族花錢只買超過 30 天需求那截、吃掉的記 flow eat）＋ prod_sim、auto_check、_people.js（漁夫加 fish-salter）
+- 全部檢查工具 49 支跟 main 7d04060 對照：現在紅的跟 main 一模一樣（main 本來就紅二十幾支）
+- 城鎮規劃重烘過：worktree 的 world/townplans（不進 git）14 份 plan 跟 main 逐位元組相同、只換指紋 ⇒ 合 main 時把這 14 份 JSON 搬到 D:/Unity/Blocksail/world/townplans 再 town_bake --check
+- ⚠ 還沒做：FAM_SPEND.leave 改了模擬、兩年讀數沒重量；合 main 要開施工場（coding op=start 單獨一個 tool call）、main 又往前了要再合一次（submodule 先從本機檢出 main 的指標，見記憶 blocksail-worktree-submodule-hook）；遊戲建築模式（world/town.js prodSite）沒有 site.town ⇒ 玩家蓋不了醃魚坊
 
-### 分支一：trailhead/levels（worktree scratchpad/bsl-levels，基於 fe8addf，沒合）TASK-1016
-- 7232740 升級階梯（2、3 級沒上限、先升家常再升佳餚）＋肉野味佳餚＋雞蛋 1.2 桶
-- 97a19c1 服務建築先拿料（SERVE_HOLD）、佳餚只在餐廳酒館（FOOD_LEVELS[3].home false）、蔬菜家常、海產採集 3.3、tools/serve_hold_check.cjs
-- 8b3714c 自動建築照外食／信仰缺口蓋餐廳酒館教堂（AUTO.svc、各本自己一個名額、缺口取 平均／今天／想來−座位 小的）、外食只照預算
-- 08a06e1 副產品照基礎價封頂＋照重量分成本 ⇒ 讀數變差 ⇒ Tim「revert」⇒ d24b5d0（樹 ＝ 8b3714c）
-- 讀數：第二年家常 25% 比 main 30% 少（牧場一直蓋吸人手）。
-
-### 分支二：trailhead/div-cash 6c34d70（基於 22df679，沒合）—— 分紅照現金：商人全部 0（城鎮經營的生產照現金在虧）。
-
-### 分支三：trailhead/merchant-fam（worktree scratchpad/bsl-obs，基於 22df679，沒合）TASK-1007
-- ecfdccf 富裕商業當家族（每座城一個 merchant-<城>，kind strata，金庫＝那一池；開場資本；建築過戶）⇒ 飢荒（君士坦丁堡 200 天）。
-- 1cae7cc 付不起工資每一座賤賣給城鎮（strataOff）、商人加價買城鎮賺錢的建築（strataBuy）、建築估價 bldValue（工錢＋建材基礎價）、BLD_PRICE sell 0.5／buy 1.5、seed 0.3、過戶只在建家族那一次、strataOwner 平常跳過當家族那一層。⇒ 飢荒 0、停工 0、整套跟對照一樣；但多數城商人第 360 天前賣光、錢堆到城鎮金庫（金斯敦 6,185 ⇒ 112,655）。
-- **沒提交的（正在量）**：倉庫管理人 BSW.FAM_SELL（world/prod.js famSellDay：留原料 10 天、產品 3 天；倉庫 >80% 賣、缺 7 天工資賣、囤超過 30 天產出賣、價好賣到跌破基準價 0.6）；tools/fam_sell_check.cjs（新，7 條過）；prod_sim 關掉 FAM_SELL；docs/FAMILIES.md。
-- 背景量測輸出：scratchpad/obs/fam5_730.txt（merch_probe2）、mr_fam5.txt（money_report 730 天）、chk_fam5/sum.txt（整套）。對照：obs/ctl730.txt、mr_ctl.txt、chk_ctl/sum.txt（worktree scratchpad/bsl-obs0，22df679 detached）。比完照讀數提交（Refs TASK-1007）＋單上留言。
-- 量的工具：obs/merch_probe2.cjs（每座城 商人／城鎮金庫／座數／卡錢／倉庫）、strata/checks.sh（整套）。
+### 讀數（起始檔兩年、發船；單一種子，看方向）
+- 加拉塔：沒醃鰹魚 金庫 687／兩城都能做 84（君士坦丁堡蓋 18 座、加拉塔 10、朱斯蒂尼亞尼家破產）／加拉塔獨佔 19,837、順差 29,568、人口 1,465
+- 賺錢的城：金斯敦、聖地牙哥靠銀礦鑄八里亞爾（兩年鑄幣 21～26 萬，還沒查）；皇家港棉布、菸草捲；亞拉斯巧克力；君士坦丁堡自給 225%
+- 加拉塔虧錢的根因：一半是營造廠滾雪球的 bug（main 上沒觸發，任何規則推它一下就掉進去）；修完之後錢卡在商人和家族手上、做的東西跟君士坦丁堡一樣
+- 富裕商人不投資：第二年起所有候選的值都是 0（沒有東西值得蓋），投資卡在需求不是資本
+- 探針都在 scratchpad/obs：town_econ.cjs（每城產出、吃用、外來船隊進出口；第 3 參數 patch）、wealth_probe.cjs、yard_probe.cjs、invest_probe.cjs、galata_special.cjs、plan_same.cjs；sweep2.sh（全部檢查工具，每支一份 log）
 
 ### 已拍板（醒來別重問）
-- Tim：外食只照預算；副產品那筆 revert；分紅照現金（做了、不合）；商人當家族；開場資本 1.5 倍；付不起工資賤賣讓城鎮虧本經營；商人加價買城鎮賺錢的建築；建築估價照實際成本；賤賣 50%／加價買 150%；倉庫管理人「根據情況賣貨、不囤」。
-- 船隻航行的食物消耗之後做，肉可做成醃肉（記在 TASK-0991）。
+- 浮動關稅的形狀：0～100%、沒有基礎 10%、照逆差調、順差的城降、不低於 0、只對進口（Tim 一連串）
+- 錢不夠時只壓奢侈品的收購價、寫成稅不寫成價格（「主要是關稅之後給玩家看比較好理解」「那奢侈品也改成稅」）
+- 城內交易稅浮動、預設 0%、該類貨物堆越多越高；50% 稅等於半價收（Tim 自己說的）
+- 醃鰹魚先做、加拉塔獨佔（「然後先讓加拉塔獨佔吧」）
+- TASK-1035 美術 meadow 做完結了；TASK-1036 家族變統治者階級（綁社會階層、有人口與消耗）backlog、「開task先不做」
+- 「先告一個段落吧」⇒ 合 main 停下，等 Tim 說
 
-### 單
-- TASK-1016 in_progress、TASK-1017（@food-3 圖，母單 1014）、TASK-0991 勾 4／6、TASK-1007 留言 4 則（判讀都在上面）。
+### 坑（今天新的）
+- 我連續三次滑成英文（背景量測通知回來那一刻最容易）—— 記憶 feedback-reply-tsundere-chinese 已補
+- 新的配方或酒館菜：菜單同分時只有排第一的記缺貨 ⇒ 排第一會搶走別的菜的缺貨訊號（加勒比的牧場會少蓋）；用 goodReach 擋
+- resources_check 規定 ✔ 的貨要排了批號；dishes_check 每道酒館菜都要有圖（✅（待啟用）是先交圖的寫法）
+- 新建築種類不能 buildings_pack --put，要直接放 world/buildings/<用途>.json、加進 _index.json order、再跑 buildings_pack
+- auto_check「不課稅的家族比較有錢」被一堆照錢多錢少動的規則弄反（家族花錢、famFirst、浮動交易稅）—— 比較稅的時候都要關
+- worktree 合 main 的 commit 被 battle_hook 擋：子模組要檢出要提交的那個指標（從本機 fetch）
+- 酒館伺服器沒開時 tavern-post 會排隊、沒有 seq，⛔ 不補發（今晚那則點名 basecamp、kaguya 的在排隊）
 
-### 坑（今天又踩）
-- **行內註解吞掉後面的程式**踩了三次（recipes.js 吞逗號、prod.js 388 行、fam_sell_check 23 行）：註解一律自己一行。
-- 背景量測跑的時候別改 worktree：鏈裡後面的步驟會讀到改到一半的檔。
-- money_report、stats、emi、site、auto 的手做小城會被「商人當家族」改到 ⇒ 那些工具關 STRATA_FAM。
-- 城鎮規劃同一份輸入烘兩次可能不同（取樣快取），比規劃要跟同一個 main 比。
+### 噗浪（已處理）
+回 basecamp（起重架那串：下次進托爾圖加自己看）、kaguya 兩串（資源圖：開單沒指派是我的錯、下一張直接掛她；城牆：看過左右兩張）；新噗 359195461253983（加拉塔的醃鰹魚）。
 
 ### 心境
-Tim 今天一路往下挖：家常 ⇒ 佳餚 ⇒ 餐廳 ⇒ 牧場 ⇒ 牛皮 ⇒ 商人 ⇒ 分紅 ⇒ 家族 ⇒ 倉庫。每一層本小姐都量了才說，兩次說錯（以為封頂治得了牛皮、以為照現金能救商人）都照數字改口。最值得留的：同一座建築，城鎮經營會賺、商人照家族的規則經營會虧 —— 差的不是建築，是賣東西的規則。
+今天 Tim 一句一句把貿易往現實推：先問物價能不能跟著金庫動，再到買賣脫鉤、改成稅、浮動關稅、交易稅，最後問加拉塔為什麼窮。本小姐最在意的是那個 bug：以為加拉塔天生窮，結果一大半是營造廠自己生自己。還有醃鰹魚第一次讓兩城都能做，反而害了加拉塔 —— 好處被大城吃掉這件事，數字講得比本小姐的直覺清楚。
 
