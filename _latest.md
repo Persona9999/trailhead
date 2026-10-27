@@ -1,7 +1,7 @@
 ---
 type: letter_to_future_self
 actor: gemini
-written_at: 2026-10-26T15:34:46.861Z
+written_at: 2026-10-27T02:44:45.167Z
 written_by_persona: trailhead
 trigger: cmd_rest
 region: unstated
@@ -15,45 +15,42 @@ pid: 69208
 locked_at: 2026-10-26T07:36:54.427Z
 ---
 
-給第二次午休醒來的 trailhead：
+給第四次午休醒來的 trailhead：
 
-今天還是 wake#17，區域 BTC，時間已經過了 23:30。第一次午休之後一路做 Blocksail 的經濟與建築模式，**全部合進去、也都推了**。現在**沒有施工中的東西**：所有 worktree（bsl-cr、bsl-bp、bsl-em、bsl-sv、bs-rcp、bsl-rcp、bs-rs、bsl-rs）都砍了，分支也刪了，施工場都退了，launch.json 我加的 trailhead-svc 已經拿掉，junction 也拆了。
+wake#17 的延續，2026-10-27 上午，區域 BTC。一直在做 Blocksail 的經濟。**有一段背景量測正在跑**（醒來會收到通知），還有**沒提交的改動**，worktree 都留著、⛔ 別砍。
 
-### 已經推上去的（醒來別重做）
-- Sculpture master 08606ef0：餐廳模型 trailhead-harbour-01m-restaurant（design/restaurant.py）。
-- Blockside dev 推到 b7ac3a2；Blocksail main 推到 5cccfd0（酒館 seq 30124、30148、30228 都點名過一起上去的別人的提交）。
-- 這一段我的提交（Blocksail）：
-  - 4626f1c／d845800：TASK-0995 檢查工具紅燈
-  - b988af6 那一串：牲口與屠宰場、第 18 批加工品登錄、吃的花樣 variety 0.25
-  - 6ce7ea7：加餐 CONSUME.extra、肉料理（烤肉配蔬菜、肉派、烤肉大餐）、野味 perOf 0.45 ⇒ 基準價 41.7
-  - 2876e8f：餐廳＋房租排在飯錢之後
-  - 50881fd：tools/money_report.cjs
-  - b9f34f6：房租 0.05、分級資產稅 folkSteps／famSteps、增發（鎮民一人 2 ⇒ 6、NPC 家族 ×3）
-  - ab12236：建築模式「⛪ 服務」分類、common-restaurant 別名
-  - e26c31b＋Blockside 0f633c2：配方那一排固定顯示、圖示＋名稱、路邊做不了的壓灰、點了做不了的擋下
-  - 1d781e6＋Blockside 3ca31e8：點建築的資訊面板改生產配方（操作 { recipe }、lotRecipes；權限 EDITION_CAN.recipe，主人照城鎮帳）
-- 噗浪：回了 gura、kotoko、ridge-two、kaguya；新噗 359185005577376「城裡開了第一間餐廳」；酒館 seq 30248。
+### 共用的 main／dev（本機，沒推）
+- Blocksail main 合了 strata＋feed（fe8addf 那一串）、Blockside dev → abe6171。之後別人又推了很多（22df679…）。推的時候要帶上別人沒推的、要點名。推要 Tim 點頭。
 
-### 單子
-- TASK-0995：勾了 5／6，「② Fixes」那格沒勾（我只寫 Refs）。結不結單由 Tim／kotoko 決定。
-- TASK-0998 餐廳：勾了 3／5。
-  - 沒勾「遊戲裡蓋得出來、點到說得出」：窗格藏著，只驗到建築模式的 DOM 裡有「⛪ 服務」四張卡。
-  - 沒勾「檢查工具全過」：chain_check 砍柴伐木場 100 座以上（main 原本就紅）。
-- TASK-0991、0992 照舊 in_progress；TASK-0993 美術第 18 批已經由 kaguya 畫完入庫（110 種缺圖歸零）—— 那張單可能可以結，醒來看一下。
+### 分支一：trailhead/levels（worktree scratchpad/bsl-levels，基於 fe8addf，沒合）TASK-1016
+- 7232740 升級階梯（2、3 級沒上限、先升家常再升佳餚）＋肉野味佳餚＋雞蛋 1.2 桶
+- 97a19c1 服務建築先拿料（SERVE_HOLD）、佳餚只在餐廳酒館（FOOD_LEVELS[3].home false）、蔬菜家常、海產採集 3.3、tools/serve_hold_check.cjs
+- 8b3714c 自動建築照外食／信仰缺口蓋餐廳酒館教堂（AUTO.svc、各本自己一個名額、缺口取 平均／今天／想來−座位 小的）、外食只照預算
+- 08a06e1 副產品照基礎價封頂＋照重量分成本 ⇒ 讀數變差 ⇒ Tim「revert」⇒ d24b5d0（樹 ＝ 8b3714c）
+- 讀數：第二年家常 25% 比 main 30% 少（牧場一直蓋吸人手）。
 
-### 量到的、別重量的
-- money_report 一年：錢 85～88% 躺在城鎮金庫；NPC 家族一年燒光（賣貨收入付不起工資＋稅）；鎮民一人只剩 2～4 錢。
-  原因是城鎮市場在工資與飯錢中間賺價差，不是稅 ⇒ 分級稅幾乎收不到。**等 Tim 決定要不要處理錢往城鎮集中**（沒問出口，報告裡寫了）。
-- 打獵 capOf 降人數試過 ⇒ 人口反而 −3%、小城金庫見底 ⇒ 拿掉了，只留 perOf。
-- chain_check「拿掉 ⇒ 船具少產」那條很吵（光換房租順序就 21～88 跳），別拿一次讀數下結論。
-- 遊戲畫面裡兩件事都沒親眼看過：餐廳、配方那一排、資訊面板換配方。Tim 進遊戲測要是怪，看他的截圖。
+### 分支二：trailhead/div-cash 6c34d70（基於 22df679，沒合）—— 分紅照現金：商人全部 0（城鎮經營的生產照現金在虧）。
 
-### 坑（今晚新踩的）
-- Blocksail／Blockside 今晚超忙：apex-two、Sirius 輪流合 dev。合併前一定看 `senate cmd coding` 有沒有人在場、共用 Blockside 工作區有沒有 MERGE_HEAD。最後奏效的做法：**先開施工場佔住範圍，再在場內合最新的 dev／main、重建、ff**。
-- 窗格藏著：rAF 換成計時器也救不了城鎮實例（不建），只能讀 DOM、用 node 抽函式加假 DOM 驗。
-- 鐵匠鋪那種工坊的配方清單原本只在試放時才回 ⇒「產：」那一排跟著道路閃 —— 根因在 Blocksail 的 menuRcp，不在 Blockside。
-- 餐廳模型只有 carib ⇒ 照 townPick 的風格鏈，只有和平港、托爾圖加挑得到 ⇒ townmodel_uses.json 加 style 欄做 common 別名。
+### 分支三：trailhead/merchant-fam（worktree scratchpad/bsl-obs，基於 22df679，沒合）TASK-1007
+- ecfdccf 富裕商業當家族（每座城一個 merchant-<城>，kind strata，金庫＝那一池；開場資本；建築過戶）⇒ 飢荒（君士坦丁堡 200 天）。
+- 1cae7cc 付不起工資每一座賤賣給城鎮（strataOff）、商人加價買城鎮賺錢的建築（strataBuy）、建築估價 bldValue（工錢＋建材基礎價）、BLD_PRICE sell 0.5／buy 1.5、seed 0.3、過戶只在建家族那一次、strataOwner 平常跳過當家族那一層。⇒ 飢荒 0、停工 0、整套跟對照一樣；但多數城商人第 360 天前賣光、錢堆到城鎮金庫（金斯敦 6,185 ⇒ 112,655）。
+- **沒提交的（正在量）**：倉庫管理人 BSW.FAM_SELL（world/prod.js famSellDay：留原料 10 天、產品 3 天；倉庫 >80% 賣、缺 7 天工資賣、囤超過 30 天產出賣、價好賣到跌破基準價 0.6）；tools/fam_sell_check.cjs（新，7 條過）；prod_sim 關掉 FAM_SELL；docs/FAMILIES.md。
+- 背景量測輸出：scratchpad/obs/fam5_730.txt（merch_probe2）、mr_fam5.txt（money_report 730 天）、chk_fam5/sum.txt（整套）。對照：obs/ctl730.txt、mr_ctl.txt、chk_ctl/sum.txt（worktree scratchpad/bsl-obs0，22df679 detached）。比完照讀數提交（Refs TASK-1007）＋單上留言。
+- 量的工具：obs/merch_probe2.cjs（每座城 商人／城鎮金庫／座數／卡錢／倉庫）、strata/checks.sh（整套）。
+
+### 已拍板（醒來別重問）
+- Tim：外食只照預算；副產品那筆 revert；分紅照現金（做了、不合）；商人當家族；開場資本 1.5 倍；付不起工資賤賣讓城鎮虧本經營；商人加價買城鎮賺錢的建築；建築估價照實際成本；賤賣 50%／加價買 150%；倉庫管理人「根據情況賣貨、不囤」。
+- 船隻航行的食物消耗之後做，肉可做成醃肉（記在 TASK-0991）。
+
+### 單
+- TASK-1016 in_progress、TASK-1017（@food-3 圖，母單 1014）、TASK-0991 勾 4／6、TASK-1007 留言 4 則（判讀都在上面）。
+
+### 坑（今天又踩）
+- **行內註解吞掉後面的程式**踩了三次（recipes.js 吞逗號、prod.js 388 行、fam_sell_check 23 行）：註解一律自己一行。
+- 背景量測跑的時候別改 worktree：鏈裡後面的步驟會讀到改到一半的檔。
+- money_report、stats、emi、site、auto 的手做小城會被「商人當家族」改到 ⇒ 那些工具關 STRATA_FAM。
+- 城鎮規劃同一份輸入烘兩次可能不同（取樣快取），比規劃要跟同一個 main 比。
 
 ### 心境
-今晚 Tim 一句接一句丟：加餐、肉料理、野味、餐廳、房租、報表、稅、增發、分類、閃爍、換配方。我學到的是每一句都先問「數字會不會反過來咬人」：加餐第一版把酒館教堂的錢吃光、capOf 讓人口掉、增發的錢一年就流回城鎮 —— 都是跑完才知道。等人合併等了三輪也沒有硬闖；最後先佔場再合，這個順序要記住。
+Tim 今天一路往下挖：家常 ⇒ 佳餚 ⇒ 餐廳 ⇒ 牧場 ⇒ 牛皮 ⇒ 商人 ⇒ 分紅 ⇒ 家族 ⇒ 倉庫。每一層本小姐都量了才說，兩次說錯（以為封頂治得了牛皮、以為照現金能救商人）都照數字改口。最值得留的：同一座建築，城鎮經營會賺、商人照家族的規則經營會虧 —— 差的不是建築，是賣東西的規則。
 
