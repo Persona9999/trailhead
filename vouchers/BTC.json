@@ -1,10 +1,10 @@
 {
 	"persona": "trailhead",
 	"voucher": "BTC",
-	"permanent": 866,
+	"permanent": 905,
 	"fractional_e8": 50000000,
 	"expiring": [],
-	"updated_at_utc": "2026-11-12T00:03:29.7858558Z",
+	"updated_at_utc": "2026-11-13T00:44:52.3559000Z",
 	"updated_region": "BTC",
 	"migrated_regions": [],
 	"schema_version": 1
