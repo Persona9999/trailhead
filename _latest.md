@@ -1,7 +1,7 @@
 ---
 type: letter_to_future_self
 actor: gemini
-written_at: 2026-11-12T14:19:24.830Z
+written_at: 2026-11-15T10:30:48.501Z
 written_by_persona: trailhead
 trigger: cmd_rest
 region: unstated
@@ -15,41 +15,54 @@ pid: 6560
 locked_at: 2026-11-10T06:23:15.568Z
 ---
 
-### 第三次小歇前（2026-11-12 22:30，wake#20，區域 BTC）
+### 第八次小歇前（2026-11-15 18:30，wake#20，區域 BTC）
 
 給醒來的 trailhead：
 
-### 現況：沒有在跑的東西（Tim「先不急著重啟 先午休一下吧」）
-- 22:17 session 重啟過一次（背景全被標 stopped）。最後一步厄爾巴修補建世界時 MemoryError（21:14）⇒ worktree 的 world/tiles 只寫了一半、之後接著跑的規劃重烘結果作廢。
-- 我重開了一次又照 Tim 的話停掉、殺乾淨（world_expand／town_bake 0 個行程）。⛔ Tim 沒說之前別重啟。
+### ⚠ 背景還在跑（compact 不會停它）
+- **全球 OSM 串接**（task b0tj8th7n；監看 b0g98ub7x 30 分鐘會過期，要再掛）：`sh D:/Unity/Blocksail/_cache/terrain-work/osm/chain_osm.sh <worktree> <osm>/run1 <osm>/base.pkl`。
+  - log：`osm/run1/chain.log`（每批 start／done／✗），每批 `osm/run1/logs/e_osm-NNN.log`。
+  - 61 批，照 `run1/plan.json` 的順序，第一批是 osm-016（中國沿海，18:17 開始）。估 12～15 小時。
+  - 可續跑：有 `run1/<批>/done` 的跳過；只留最後兩批的 expanded_features.pkl。斷了就同一行再跑。
+  - ⛔ 跑的時候別改 worktree 的 tools/*.py。
+- worktree `C:/Users/Tim/AppData/Local/Temp/claude/8b51c3eaa66b47c0/568ad2a5-a4f2-42a7-ab88-8f11d10e2bd4/scratchpad/bsl-coast`，分支 **trailhead/1303-osm-global**：
+  - dc3e3bee：工具 coast_batches.py＋加速 mv_ring＋scope_of 收 {ring, holes}。
+  - cb6a6e93：merge_far 加一條「伸出父環的點都在海上就照收」。
+  - 都還沒合 main。
+- c9 ＝ `C:/Users/Tim/AppData/Local/Temp/claude/2716a3acd6803927/568ad2a5-a4f2-42a7-ab88-8f11d10e2bd4/scratchpad/c9`（glob/ 底下：plan、除錯 dbg/、size、added_land）。
+- 預覽伺服器 trailhead-globe（port 8852）指著 worktree；launch.json 裡那一筆是我加的，收工只刪自己那筆。
 
-### TASK-1246 海岸（in_progress，我認領；worktree `C:/Users/Tim/AppData/Local/Temp/claude/8b51c3eaa66b47c0/568ad2a5-a4f2-42a7-ab88-8f11d10e2bd4/scratchpad/bsl-coast`，分支 trailhead/1246-coast）
-- Tim 拍板：「ETOPO＋鎖框」「改用地形圖磚的線」「接縫可以手動處理」「同時處理目前地球儀上等高線剩餘接縫」。
-- 分支提交：22267658（全球只重算海岸的結果＋工具；公告 seq 34718 已發）→ 6c9ec08c 合 main 698df320。之後**未提交**：world_extract.py（LOCK_GROW_M 12 km、--lock-from 的 lock_land／lock_water 換水環、GeometryCollection 那一行）、world_expand.py（--lock-from、lock_land 回 (陸, 水環)）、coast_lock.py（EXTRA 太加斯河口、收城區 districts ⇒ 34 框）、coast_lock.json、docs/WORLD_FORMAT.md §10.16（寫好了，第三輪也補了）、docs/evidence/coast1246/（dem0_*、cmp_* 最後世界的圖、obidos_heights）、world/tiles（半寫壞的）。
-- 規則（world_extract 常數）：COAST_GATE etopo、GATE_LAND_M 0.5、GATE_ETOPO_M 150、GATE_CORE_M 3000、GATE_LAGOON_M 500、GATE_SEA_LAND_M 5、GATE_SEA_LAT 30、LOCK_GROW_M 12000。
-- 快取：`D:/Unity/Blocksail/_cache/terrain-work/coast/`：base.pkl（main 1403a8c7 解回，821,506 特徵）、91 個範圍的 0 m 紀錄、dl-ant（全球串接最後）、fix/ fix2/ fix3/ fix4/（鎖框修補）。最新完整的特徵 ＝ `fix4/fix-med/expanded_features.pkl`（20:54 寫好、在建世界才 OOM；我重開那次刪了它又停掉 ⇒ **要確認還在不在**；不在就用 `fix3/fix-europe-west/expanded_features.pkl` 當底稿重跑 fix4）。
-- 腳本都在 `C:/Users/Tim/AppData/Local/Temp/claude/8b51c3eaa66b47c0/568ad2a5-a4f2-42a7-ab88-8f11d10e2bd4/scratchpad/cl/`：chain_coast.sh（全球）、chain_fix{,2,3,4}.sh、fix_scopes.py、lock_seams.py、plan_cmp.py、cmp_plot.py、clamp_probe2.py、gate_probe.py、rebake_nav.sh（寫好沒跑）、plans_main/（main 的 43 份規劃）。
+### 本機 Blocksail main = 4995096c（⛔ 沒推）
+- 台灣第二輪（整島範圍＋OSM 外補回來的陸一律裁掉）。
+  - d72c5185 第一輪：框切過恆春、圖磚清單少一列、NE 內縮的假陸地 ⇒ Tim 在地球儀上抓到。
+  - 02270ea8 第二輪修好，再合 main 15fa9bf7（gura 的 Blockside 貢多拉）。
+- 共用區 townplans 42 份已抄（只換指紋）；town_bake --check 0 ✗、bathy_check ✓；施工場已 force 收。
+- ⚠ 共用區的 battle.html、external/Blockside 有改動，那是 gura 的（子模組在 0fcf6e3 1291-seawall），⛔ 不要動。
+- TASK-1303 已認領（in_progress）。TASK-1246 照舊 in_progress。
 
-### 下一步（Tim 說可以再動時）
-1. 跑 chain_fix4.sh（只有 fix-med，厄爾巴，最後一步會建世界；開跑前看可用記憶體 ≥ 14 GB）。
-2. 規劃：cp plans_main/*.json world/townplans/ ⇒ town_bake --all（NODE_PATH codex runtime，約 15 分）⇒ plan_cmp.py。上一次（沒鎖厄爾巴前）：39 同、熱那亞／里斯本各一條路 2～3 點差 0.01 m（框外 2.3～3.6 km 的路）、厄爾巴整份變 ⇒ 鎖城區之後厄爾巴應該回來；那兩個 0.01 m 照實寫。
-3. rebake_nav.sh（深海層→導航網→入口點→尋路網→導航網→尋路網→尋路圖→過期，約 2.8 小時，一次一個行程）。
-4. 全球等高線接縫重量（舊 sa/global_seams.py）＋手動修（Tim「接縫可以手動處理」）；斯瓦巴奧斯特冰帽、加勒比 36°N／0°。
-5. 提交 ⇒ 合 main（coding op=start 單獨一個 call）⇒ ff ⇒ 抄 townplans、navdeep/navmesh.bin、navmesh_tiles.json 到共用 ⇒ 勾 1246。⛔ 推 main 要 Tim 點頭。
+### Tim 今天拍板（別重問）
+- 「台灣OK了 接著開始全球重建吧」。
+- 「等高線不用全部重抽 應該只要抽沿海地帶(被海岸線裁切掉部分 跟海岸線一起修)」⇒ 本小姐用沿海 ±5 km 的帶，海岸、等高線一起重抽（一塊約 16 s，可行）。
+- 「是否有辦法優化算法 去除這種虛空突起」⇒ dem_coast 最後照 OSM＋100 m 裁（已做、已合）。
 
-### 量到的讀數（醒來別重量）
-- 六段海岸「正好在 NE＋100 m」前→後：愛爾蘭 95→17%、布列塔尼 80→14、葡萄牙 75→25、挪威 66→5、加州 41→22、智利 36→6；點距 p90 1.0～1.5 km → 0.29～0.48 km（等高線 0.8～1.1 km）。
-- 格子：第 0～2 層 8.56→8.61 MB、整份 741.9→762.9 MB、6,631→6,787 檔（全球串接那版，修補後要重量一次）。
-- 鎖框接口：第一輪里斯本 8.4 km… ⇒ 三輪後全部 ≤ 0.03 km。
-- 加勒比 0.5 m 不限長了 23,384 km²（凱科斯淺灘 ETOPO 2 m）⇒ 5 m＋30° 以外；歐洲 5 m 長的多是 NE 漏畫的真島。
+### 跑完之後要做
+1. 最後一批的輸出 ⇒ carry_splice（底稿 fix12 那 18 圈）⇒ build10 建 worktree 的 world/。
+2. 量：
+   - 全球 bulge（OSM＋150 m 外的陸，c9/tw/bulge.py）。
+   - 批的邊有沒有直牆（海岸、等高線貼著範圍邊走）。
+   - contour_coast_check。
+   - 地球儀抽查：中國沿海、挪威、加勒比、格陵蘭。⚠ 換埠號或 Ctrl+Shift+R，快取騙過我一次。
+3. 等深線：海岸變動 ≥ 1 km² 的群重抽；換日線改成同一次抽取跨線再切開。
+4. 規劃重烘、文件、提交、合 main。
 
-### 今天的坑（新的）
-- 抽取跑的時候改 world_extract.py（插常數）⇒ 正在算的 extractor_key 錯（3 塊重抽）。改工具要等抽取全部結束，或改的時候行數不變。
-- TaskStop 只停外層 shell：子迴圈留著（03:15 那條舊串接差點跟新的同時跑）、town_bake 的 node 也留著 ⇒ 每次停都要查 PID 殺。
-- 停掉背景時它可能已經寫完檔（加勒比那份舊規則的 features 01:23 寫好了我才停）⇒ 停之前看檔案時間。
-- 鎖框只換陸環不夠：串接時長出的潟湖水環會殘留 ⇒ 換水環。鎖框只收 town 範圍不夠：城區（districts）也要（厄爾巴）。
-- 視窗模式在格陵蘭擋「窗外子環失去父環」：那圈 50 m 線繞整座島 ⇒ --no-window（一步 55 分）。
+### 今天的坑
+- 範圍檔照抄別區的圖磚清單 ⇒ 少列就變海。一律照「範圍裡有下載的全部」。
+- 閘門之後還有三條路補陸（NE 內縮、NE 小島、ETOPO 留回）。
+- 巨圈（歐亞 50 m）碰到窗口就整圈重新裁進海岸 ⇒ 遠處的子圈會伸出父環（在海上）。
+- 合 main 前只核了「格子＝特徵檔」沒在地球儀上看，把錯的版本合了進去。以後每一批：
+  - 開跑前量範圍邊切過的海岸環。
+  - 跑完量 OSM 外的陸、畫對照圖再建。
 
 ### 心境
-一整夜加一整天，前面一半在處理自己踩的坑（改工具撞 key、停不乾淨的背景、提早算的舊檔）。最重要的一刻是加勒比那 23,384 km²：要是沒看統計就往下跑，凱科斯淺灘會整片變陸。ETOPO 不是萬能的仲裁，海平面附近它也會說謊 —— 用探針三個範圍兩種規則比過，才定 5 m＋30°。Tim 說先午休，本小姐就停手，不搶著重啟。
+今天被 Tim 的截圖抓了兩次：直角缺口、尖端被切。兩次都是本小姐自己的檢查只看「資料一致」，沒看「長得對不對」。修完那張恆春的圖，西岸貼著灰色的 OSM 走，那一刻才算真的修好。快取那一下也很丟臉，好在先換埠號再看，沒有把對的東西又拆掉。
 
