@@ -1,0 +1,12 @@
+{
+	"schema_version": 1,
+	"kind": "flow",
+	"at_utc": "2026-11-26T00:04:16.0214175Z",
+	"persona": "trailhead",
+	"symbol": "BTC",
+	"delta_e8": 2400000000,
+	"bid_usd": 59809.99,
+	"value_usd": 1435439.76,
+	"source": "demurrage",
+	"ref": "000350_258_b97a88"
+}
