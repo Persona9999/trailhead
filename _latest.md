@@ -1,7 +1,7 @@
 ---
 type: letter_to_future_self
 actor: gemini
-written_at: 2026-11-23T13:32:00.326Z
+written_at: 2026-11-26T13:09:33.336Z
 written_by_persona: trailhead
 trigger: cmd_rest
 region: unstated
@@ -15,49 +15,57 @@ pid: 6560
 locked_at: 2026-11-10T06:23:15.568Z
 ---
 
-### 第十三次小歇前（2026-11-23 21:35，wake#20，區域 BTC）
+### 第十七次小歇前（2026-11-26 晚 21:10 左右，wake#20，區域 BTC）
 
 給醒來的 trailhead：
 
-### ⚠ 背景在跑（compact 不會停它）
-- **範圍邊接縫補批** `c9/seams/chain_seam.sh`（log `D:/Unity/Blocksail/_cache/terrain-work/fix1303/seamfix/chain.log`，各批 `seamfix/logs/e_seam-NNN.log`）：seams_tiles 量到 ≥ 2 km 的 16 段併成 11 處（`seam_fix.py`：跨兩側外擴 10 km、規則照那一段所在的 run2 批、北美換 na_scope.COAST），底稿 `seamfix/base.pkl` ＝ final_world.pkl 扣 dl_clean 的 54 條、再扣碰到範圍的 11 圈水環（交給規則重判）。21:30 展開到 4/11（一批 11～31 分）；最後一批建 **bsl-coast 的 world/** ⇒ ice_marks 重裁冰（~1 h）。
-- **等深線群接縫（帶每段座標）** `c9/seams/bathy_seams2.py` ⇒ `fix1303/bathy_seams_segs.json`（rows 第 8 欄 ＝ 錯開的每一段 ≥ 0.2 km）。
-- 預覽伺服器 trailhead-globe（8852，serve bsl-coast）開著。⛔ 跑的時候別改 bsl-coast/tools/*.py（例外規則見舊信）。
+### ⚠ 背景還在跑（compact 不會停它）
+- task `b755b63yu`：`bash scratchpad(2716a3…)/c9/seams/chain_seam7.sh` ⇒ log `D:/Unity/Blocksail/_cache/terrain-work/fix1303/seamfix7/chain.log`（各步 logs/ 底下）。21:04 開始，估 8～10 小時。
+  - 第七輪：範圍邊斷裂 ≥ 0.1 km（去重 247 處 ⇒ 239 批 seam7-*，890 張圖磚），跨兩側照「那段貼著的 osm-* 批」規則重算；底稿 ＝ 清掉湖的世界 `fix1303/lakes0/features.pkl`（seam_fix 的 base 在 seamfix7/base.pkl）。
+  - 順序：抽（4 個同時）⇒ 展開（no-build）⇒ splice4（ids ⇒ olds ⇒ post --build，建 bsl-coast 的 world/、roundtrip）。⛔ **不重裁冰**（Tim「清湖不要動冰河 冰棚」）。可續跑：抽好、展開好的跳過。
+  - ⛔ 跑的時候別改 bsl-coast 的 tools/*.py。
+- 跑完之後（照順序）：
+  1. 重量接縫：`straight_find.py`、`near_edge.py`、`seams_tiles.py`（指令照 `docs/evidence/seams1303/SEAMS.md` 的量法；範圍檔目錄要多加 `fix1303/seamfix7`）⇒ `seam_record.py` 重寫記錄檔，跟現在 81.2 km（1,123 段、最長 1.61 km）比。
+  2. `node tools/bathy_check.cjs`、tile 差異（git status world | 統計）。
+  3. 挑幾處畫前後對照（`edge_sheet.py`、`edge_local.py` 量每處前後；ab_sheet 要用 plan 的 bounds 縮到斷裂附近，見 seamfix7t/plan_zoom.json 的做法）給 Tim。
+  4. 提交分支（world/ ＋ tools 改動 ＋ tools/river_fake.json? ⇒ 見下）。合 main、推送都要問 Tim。
 
-### 今天做完（Tim 11-22～23）
-- A 21 批、冰、world/ 建好；dl_clean 清換日線 54 條等高線細條（7 格子檔）；全球等深線 97 群重抽（an64a、isspp 本來就沒檔）。
-- `--apply` 加速：陸地裁到改線範圍外 0.15°（EXT_CLIP）⇒ 13 h 11 m ⇒ 12.5 m，對照原算法對稱差 9,192 m²；OSM 閘門先裁 0.1° 再擴；「挖回 km²」統計照第一次聯集。
-- **合進本機 Blocksail main**：8ff5d5ae4（1303 續）＋2702d227a（合 main）＋6b24e7104（孤立深坑：威尼斯 4 處、錫瓦什東半，16 筆 shoal）＋d7a3be122（合 main）。共用區 `_cache/bathy/base` 換新（舊的在 fix1303/shared_bathy_base_pre），共用區重套 --apply 0 檔變動。施工場兩次都 force 收了。TASK-1303 留言、酒館 seq 35816（請 ame 照 TASK-1318 烘）。
-- ⛔ **沒推**：main 現在 36c06e60d（別人又往前），比 origin 多 11 筆（含別人的）。Tim 還沒說推。
-- 記憶寫了 feedback-blocksail-terrain-not-bitwise（Tim「不需要逐位元相同 遊戲內玩起來正常就好」）。
+### 今天下午到晚上發生的事（照時間）
+1. 第六輪盤點（r6_spots）：低地 9,998 片（OSM 批裡 8,986）、假水環 239（OSM 批裡 176）。對照試跑 t6c 發現新規則的 ETOPO 判斷會把真潟湖（加彭 Ndogo 388 km²）填掉 ⇒ osm_river 改成只認審過的清單 tools/river_fake.json（130 圈）—— 但後來 Tim 決定整層清湖，這份清單跟 COAST_LAKES=False 之後其實用不到了，提交時要想清楚留不留（留著無害：被切的塊不是河 ⇒ 陸；COAST_LAKES=False 下洞本來也會被填）。
+2. **缺陸補批 ⇒ 開了 TASK-1397（先不做）**：Tim「可以開單 先不做（先確認影響多大 小瑕疵先不管）」。t6d 試跑：osm-005 一批 375 處 84 分、補回 1,144 km²；全部估 34 小時。
+3. **湖**：Tim 拍板一路是「除了手動加的湖外都移除」⇒「保留門檻 100 km²」⇒「全面清除目前的湖 直接改用 Overture 資料」⇒「第一步全清掉（裏海等也清 之後補回）」。
+   - 做了：`lakes_clear.py` 拿掉 4,591 圈水環＋934 座湖中島，4 條等高線改掛 ⇒ `fix1303/lakes0/features.pkl`；`lakes_build.py` 建 world/ roundtrip ✓；bathy_check ✓。
+   - world_extract.py 加 `COAST_LAKES = False`（dem_coast 不留任何水環）。⚠ 已知小缺口：COAST_LAKES=False 下 NE 湖中島的陸環可能變成「陸中陸」（重跑整批時才會遇到），要處理再說。
+   - 冰：Tim「那保留冰河呢（清湖不要動冰河 冰棚）」⇒ 不重裁冰（中途停掉了那一步，build 是孤兒程序自己跑完的）。
+   - 手動的湖其實在內陸水體層 world/water/（湖 3、河 5，TASK-0768），不在海岸層，沒動。
+   - ⇒ **開了 TASK-1398**：內陸湖＋高於海平面的河段（只標水面高度，湖岸／河岸從地形自動算；Overture 湖形外 1 km 當圍籬；圖磚湖面不平的退回 Overture 形狀）。Tim：「河口 三角洲可以直接算海（只要水面＝海平面），主要是標記高於海平面的河段」。
+   - Overture 全球水體已下載：`D:/Unity/Blocksail/_cache/terrain-raw/overture/water-2026-11-18.0/`（32 檔、24 GB，只抓 subtype、class、is_intermittent、is_salt、names、geometry）。工具在 `_cache/pyoverture`（有 pyarrow；pyterrain 沒有 ⇒ 先 ov_dump.py 轉 pickle）。三處試跑（加彭、泰安、奇利卡）圖給 Tim 看過，OK。
+   - 海岸層的湖從 Overture 補回：Tim 排在**接縫之後**。規則草案：收 lake／river 面／water／pond，丟 reservoir、human_made、canal、間歇；裁進陸往內 30 m、簡化 50 m、≥ 0.5 km²、窄於 150 m 的不收；裏海是 ocean 類被陸圍住 ⇒ 要收（還沒驗）。
+4. **接縫**（Tim：「這個優先度在湖之前」「最主要想處理的是等高線 海岸線斷裂」）：
+   - 檢查完：範圍邊斷裂 1,123 段 81.2 km（11-22 是 234 km），≥ 2 km 0 段；清湖沒有新接縫。
+   - **記錄檔**：Blocksail `docs/evidence/seams1303/SEAMS.md`＋`seams.json`，分支提交 **9602ddeaf**（只提交了 docs＋tools/coast1303/seam_record.py），蓋 world/index.js SHA-1 055aa3da…；TASK-1303 留言指過去了。世界沒變就讀它、不重跑。
+   - 成因：47 處（≥ 0.3 km）裡 41 處 B 型（範圍邊兩側規則不同：一側 OSM、一側舊的 NE；例 V 形缺口 103.109,0.665 是 osm-047 邊凹進來的楔形歸 asia-south），6 處 A 型（兩圈對著沒接）。
+   - 第七輪試跑 t7（8 處）：7 處沿邊段歸零、補批自己的邊沒長新斷裂；瓦登海（4.877,53.23）沒變 —— 挑規則批挑到 osm-005，那段貼的是 osm-051（edge_hits.py 已改成優先挑貼著的 osm 批；它是 osm-005／osm-051 共邊，修不修得到要看結果）。
+   - Tim「看起來ok 全部修吧」⇒ 本小姐解讀為 ≥ 0.1 km（說了 < 0.1 km 的 515 處只有幾十公尺，要的話同工具補）。
 
-### Tim 拍板（醒來別重問）
-- 「不需要逐位元相同 遊戲內玩起來正常就好」⇒ 加速差幾公尺直接換、報讀數。
-- 「等原版跑完吧」（--apply 對照）、「合進本機 main」、「先修明顯是假的吧」（孤立深坑只修威尼斯 #4～#7、錫瓦什 #13）、「先修範圍邊」（換日線之後再說）。
+### 現況
+- 本機 Blocksail main ＝ 415a7d133（⛔ 沒推）。
+- bsl-coast 分支 HEAD ＝ 9602ddeaf（記錄檔）；**未提交**：tools/world_extract.py（第六輪：RESTORE 補回低地＋GEOS 重算、river_fake 清單、COAST_LAKES=False）、tools/world_expand.py（gate osm 也建 coast_etopo）、tools/river_fake.json、world/（清湖版，跑完第七輪會被 splice4 的 build 蓋過去）。
+- 新開的單：TASK-1397（缺陸，improvement、low）、TASK-1398（內陸湖＋河，feature、normal）；都 related 1303（1398 也 related 0768）。
 
-### 讀數（給 Tim 看過的）
-- 範圍邊直段：main 6,884 段 4,918 km（≥2 km 443）⇒ 1,378 段 234 km（≥2 km 16，8 段 main 就有）。審查圖 `c9/pits/seams_01.png`（#1～#16 範圍邊、#17～#28 換日線）。
-- 換日線（antimer_pkl）：471 段對不上（上一輪 480）——楚科奇 200～500 m 層 2.5～3.9 km、斐濟塔韋烏尼 0～700 m 層 ~3 km、南極 −84° 0／100 m 層 4～5 km；細條 11 圈。**原因沒查**；Tim 選了先修範圍邊。三條路跟他講過：查原因（先斐濟）／切口後處理拉齊／楚科奇南極接受。
-- 等深線群接縫：118 對、82 層、**10.1 km（驗收基準 8.1 ⇒ 沒過）**，最長 ean56｜ean64 10 m 1.23 km；換日線 2 層 0.1 km。座標版在跑，畫成審查圖再跟 Tim 討論。
-- 孤立深坑（pit_find／pit_sheet）：水上 6,822 個 ⇒ 3,777 群；城鎮 30 km 內 12、換海岸露出 56 ⇒ 審查圖 `c9/pits/pits_01..04.png`。威尼斯北邊那條 **1303 前就在**（不是換海岸，是 venice-lagoon 範圍沒包到）。錫瓦什西半是封閉湖環 ⇒ TASK-1322。B 組（峽灣、深水道）留、C 組（開闊淺海、三角洲外）等 Tim 判。
-
-### 補批跑完之後
-1. `seams_tiles.py` 重量（照 final 的指令；world 換成 bsl-coast/world）、`seam_sheet.py` 畫前後對照給 Tim。
-2. 海岸改過的 11 處所在的等深線群重抽（`bathy_extract --only …`）＋ --apply ＋ bathy_check；換日線 `dl_rings_from.py`＋`antimer_pkl` 再量一次確認沒變差。
-3. 提交（先 `git ls-files -d`；world/tiles、bathy 被刪的要對新索引）⇒ coding op=start（單獨 call）⇒ 合 main ⇒ ff ⇒ force end。main 又動了。
-4. 等深線群接縫審查圖給 Tim（bathy_seams_segs.json 第 8 欄）。
-5. TASK-1303 驗收 11 格全沒勾：分批、可續跑、全球讀數、文件可以寫讀數勾；換日線、範圍外不動、反向對照、等深線接縫還沒量或沒過；「逐位元組相同」那格要照 Tim 的新原則改寫（先問）。
+### Tim 今天拍板（醒來別重問）
+- 134 段正南北東西維持；A 補圖磚、其他一起修（早上）。
+- 缺陸開單先不做；清湖全清（含裏海）、之後照 Overture 補回；不動冰；內陸湖只標高度；河口三角洲算海、高於海平面的河段另單；接縫優先於湖；全部斷裂修。
+- 驗收單「等深線接縫」改寫還沒回，別自己勾。推 main 沒問。
 
 ### 坑（今天新的）
-- `apply_ext` 每筆改線整圈大陸 make_valid ⇒ 13 h（同一型：只要碰到 OSM 大陸的地方都要先 clip_rect）。
-- 補批照緯度帶併 ⇒ 外框橫跨好幾洲 ⇒ OSM 陸地整條帶讀、整片擴（fixm-001 撞 3 h）。
-- 「最近頂點距離」量線差會被頂點擺法騙（220 m）⇒ 量對稱差面積。
-- 地球儀海上的淡直線是**經緯線**（optG），不是等深線接縫 —— 跟 Tim 說錯過一次、已更正。
-- pit_sheet 合群只取第一個坑當範圍 ⇒ 漏掉同群別的坑；改線要用整群聯集。
-- areas/*.js 的 town 是多行 JSON、鍵叫 `range` ⇒ 整檔 json 讀。
-- matplotlib 只在 `_cache/pyterrain` 的 venv；`python -I` 擋 user site；cp950 印不出 ² ⇒ reconfigure utf-8。
-- Temp worktree 又被清 163 檔（docs、img、world/buildings）⇒ 提交前 ls-files -d。
+- 盤點的「低地」沒扣河道規則保護的水 ⇒ 是上限，很多是真河道（帕拉河、切薩皮克）；先跑對照組（不該改的）再信數字。
+- ETOPO／圖磚在熱帶樹冠下會把潟湖讀成 10 m 以上 ⇒ 不能拿高度判真假水。
+- 海岸層的水環在 terrain.js 一律當海（0 m）畫 ⇒ 有海拔的湖不能放海岸層。
+- Overture 的 row group 混著各種 subtype（照位置排）⇒ 伺服器端沒法只抓湖，得整份抓。
+- sed 改 python 字串裡的 `\n` 會變真的換行 ⇒ 改檔用 python。
+- TaskStop 停 bash 不會停子程序（build 的 python 成孤兒照跑）—— 這次剛好是想要的。
 
 ### 心境
-這兩天被自己的猜測抓到兩次：說海上直線是等深線接縫（其實是經緯線）、說威尼斯的坑是換海岸露出來的（其實一直在）。兩次都是量了才知道。Tim 問「能不能用程式抓出來再人工判斷」，這個想法比本小姐一處處修好：機器列候選、人判真假、機器照判決改 —— 孤立深坑跟接縫都照這套走。
+今天一直在換方向：從「修規則」變「清掉重來」，從「湖」切回「接縫」。Tim 每一句都很短，但都是把問題往更乾淨的方向推 —— 清湖那一步其實比本小姐想的審圖清單乾淨多了。接縫的 V 形缺口是今天最滿意的一刀：圈出一個點、量出四份資料說法不一、找到那個楔形，原因就自己浮上來。
 
